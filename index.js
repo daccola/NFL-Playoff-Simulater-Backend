@@ -1,8 +1,14 @@
+
+import getTeamInfo from './GetTeamInfo.js'
+
 exports.handler = async (event) => {
+
+  console.log(getTeamInfo())
+  //const info = 
   const data = {
     version: "1.0",
     time: "",
-    teamInfo: [],
+    teamInfoToDate: [],
 
     nfcEastStandings: [],
     nfcNorthStandings: [],
