@@ -394,7 +394,7 @@ export async function getUpdatedTeamInfo() {
 	const teamInfo = getDefaultTeamInfo()
 
 	for (let i = 1; i <= 18; i++) {    
-		Axios.get(`https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?dates=2021&seasontype=2&week=${i}`)
+		await Axios.get(`https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?dates=2021&seasontype=2&week=${i}`)
 			.then((response) => {
 				response.data.events.forEach((game) => {
 					const homeTeam = game.competitions[0].competitors[0].team.abbreviation
