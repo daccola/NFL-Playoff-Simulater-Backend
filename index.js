@@ -1,12 +1,14 @@
 const https = require('https')
 
 exports.handler = async (event) => {
-  const info = getDefaultTeamInfo()
+  const teamInfo = getDefaultTeamInfo()
+
+const year = '2021'
 
 	//Gets game info for all 18 weeks
   for (let i = 1; i <= 18; i++) {
     let dataString = ''
-    const url=`https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?dates=2021&seasontype=2&week=${i}`
+    const url=`https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?dates=${year}&seasontype=2&week=${i}`
     const response = await new Promise((resolve, reject) => {
       const req = https.get(url, function(res) {
         res.on('data', chunk => {
@@ -32,10 +34,10 @@ exports.handler = async (event) => {
       response.body.events.forEach((game) => {
         const homeTeam = game.competitions[0].competitors[0].team.abbreviation
         const roadTeam = game.competitions[0].competitors[1].team.abbreviation
-        const homeConference = info[homeTeam].conference
-        const roadConference = info[roadTeam].conference
-        const homeDivision = info[homeTeam].division 
-        const roadDivision = info[roadTeam].division 
+        const homeConference = teamInfo[homeTeam].conference
+        const roadConference = teamInfo[roadTeam].conference
+        const homeDivision = teamInfo[homeTeam].division 
+        const roadDivision = teamInfo[roadTeam].division 
 
 				// Complete Game
 				if(game.competitions[0].status.type.completed) {
@@ -45,16 +47,16 @@ exports.handler = async (event) => {
 					  
 						// Tie
 						if(!game.competitions[0].competitors[0].winner && !game.competitions[0].competitors[1].winner){
-							info[homeTeam].overallRecord[2] += 1
-							info[roadTeam].overallRecord[2] += 1
+							teamInfo[homeTeam].overallRecord[2] += 1
+							teamInfo[roadTeam].overallRecord[2] += 1
 
-							info[homeTeam].conferenceRecord[2] += 1
-							info[roadTeam].conferenceRecord[2] += 1
+							teamInfo[homeTeam].conferenceRecord[2] += 1
+							teamInfo[roadTeam].conferenceRecord[2] += 1
 
-							info[homeTeam].divisionRecord[2] += 1
-							info[roadTeam].divisionRecord[2] += 1
+							teamInfo[homeTeam].divisionRecord[2] += 1
+							teamInfo[roadTeam].divisionRecord[2] += 1
 
-							info[homeTeam].games[i] = {
+							teamInfo[homeTeam].games[i] = {
 								isCompleted: true,
 								result: "tie",
 								score: parseInt(game.competitions[0].competitors[0].score),
@@ -62,7 +64,7 @@ exports.handler = async (event) => {
 								oppScore: parseInt(game.competitions[0].competitors[1].score),
 							}
 
-							info[roadTeam].games[i] = {
+							teamInfo[roadTeam].games[i] = {
 								isCompleted: true,
 								result: "tie",
 								score: parseInt(game.competitions[0].competitors[1].score),
@@ -72,16 +74,16 @@ exports.handler = async (event) => {
 								
 						// Home Win
 						} else if (game.competitions[0].competitors[0].winner){
-							info[homeTeam].overallRecord[0] += 1
-							info[roadTeam].overallRecord[1] += 1
+							teamInfo[homeTeam].overallRecord[0] += 1
+							teamInfo[roadTeam].overallRecord[1] += 1
 
-							info[homeTeam].conferenceRecord[0] += 1
-							info[roadTeam].conferenceRecord[1] += 1
+							teamInfo[homeTeam].conferenceRecord[0] += 1
+							teamInfo[roadTeam].conferenceRecord[1] += 1
 
-							info[homeTeam].divisionRecord[0] += 1
-							info[roadTeam].divisionRecord[1] += 1
+							teamInfo[homeTeam].divisionRecord[0] += 1
+							teamInfo[roadTeam].divisionRecord[1] += 1
 
-							info[homeTeam].games[i] = {
+							teamInfo[homeTeam].games[i] = {
 								isCompleted: true,
 								result: "win",
 								score: parseInt(game.competitions[0].competitors[0].score),
@@ -89,7 +91,7 @@ exports.handler = async (event) => {
 								oppScore: parseInt(game.competitions[0].competitors[1].score),
 							}
 
-							info[roadTeam].games[i] = {
+							teamInfo[roadTeam].games[i] = {
 								isCompleted: true,
 								result: "loss",
 								score: parseInt(game.competitions[0].competitors[1].score),
@@ -99,16 +101,16 @@ exports.handler = async (event) => {
 							
 						// Road Win
 						} else if (game.competitions[0].competitors[1].winner){					
-							info[homeTeam].overallRecord[1] += 1
-							info[roadTeam].overallRecord[0] += 1
+							teamInfo[homeTeam].overallRecord[1] += 1
+							teamInfo[roadTeam].overallRecord[0] += 1
 
-							info[homeTeam].conferenceRecord[1] += 1
-							info[roadTeam].conferenceRecord[0] += 1
+							teamInfo[homeTeam].conferenceRecord[1] += 1
+							teamInfo[roadTeam].conferenceRecord[0] += 1
 
-							info[homeTeam].divisionRecord[1] += 1
-							info[roadTeam].divisionRecord[0] += 1
+							teamInfo[homeTeam].divisionRecord[1] += 1
+							teamInfo[roadTeam].divisionRecord[0] += 1
 
-							info[homeTeam].games[i] = {
+							teamInfo[homeTeam].games[i] = {
 								isCompleted: true,
 								result: "loss",
 								score: parseInt(game.competitions[0].competitors[0].score),
@@ -116,7 +118,7 @@ exports.handler = async (event) => {
 								oppScore: parseInt(game.competitions[0].competitors[1].score),
 							}
 
-							info[roadTeam].games[i] = {
+							teamInfo[roadTeam].games[i] = {
 								isCompleted: true,
 								result: "win",
 								score: parseInt(game.competitions[0].competitors[1].score),
@@ -130,13 +132,13 @@ exports.handler = async (event) => {
 					  
 						// Tie
 						if(!game.competitions[0].competitors[0].winner && !game.competitions[0].competitors[1].winner){
-							info[homeTeam].overallRecord[2] += 1
-							info[roadTeam].overallRecord[2] += 1
+							teamInfo[homeTeam].overallRecord[2] += 1
+							teamInfo[roadTeam].overallRecord[2] += 1
 
-							info[homeTeam].conferenceRecord[2] += 1
-							info[roadTeam].conferenceRecord[2] += 1
+							teamInfo[homeTeam].conferenceRecord[2] += 1
+							teamInfo[roadTeam].conferenceRecord[2] += 1
 
-							info[homeTeam].games[i] = {
+							teamInfo[homeTeam].games[i] = {
 								isCompleted: true,
 								result: "tie",
 								score: parseInt(game.competitions[0].competitors[0].score),
@@ -144,7 +146,7 @@ exports.handler = async (event) => {
 								oppScore: parseInt(game.competitions[0].competitors[1].score),
 							}
 
-							info[roadTeam].games[i] = {
+							teamInfo[roadTeam].games[i] = {
 								isCompleted: true,
 								result: "tie",
 								score: parseInt(game.competitions[0].competitors[1].score),
@@ -154,13 +156,13 @@ exports.handler = async (event) => {
 							
 						// Home Win
 						} else if (game.competitions[0].competitors[0].winner){
-							info[homeTeam].overallRecord[0] += 1
-							info[roadTeam].overallRecord[1] += 1
+							teamInfo[homeTeam].overallRecord[0] += 1
+							teamInfo[roadTeam].overallRecord[1] += 1
 
-							info[homeTeam].conferenceRecord[0] += 1
-							info[roadTeam].conferenceRecord[1] += 1
+							teamInfo[homeTeam].conferenceRecord[0] += 1
+							teamInfo[roadTeam].conferenceRecord[1] += 1
 
-							info[homeTeam].games[i] = {
+							teamInfo[homeTeam].games[i] = {
 								isCompleted: true,
 								result: "win",
 								score: parseInt(game.competitions[0].competitors[0].score),
@@ -168,7 +170,7 @@ exports.handler = async (event) => {
 								oppScore: parseInt(game.competitions[0].competitors[1].score),
 							}
 
-							info[roadTeam].games[i] = {
+							teamInfo[roadTeam].games[i] = {
 								isCompleted: true,
 								result: "loss",
 								score: parseInt(game.competitions[0].competitors[1].score),
@@ -178,13 +180,13 @@ exports.handler = async (event) => {
 							
 						// Road Win
 						} else if (game.competitions[0].competitors[1].winner){					
-							info[homeTeam].overallRecord[1] += 1
-							info[roadTeam].overallRecord[0] += 1
+							teamInfo[homeTeam].overallRecord[1] += 1
+							teamInfo[roadTeam].overallRecord[0] += 1
 
-							info[homeTeam].conferenceRecord[1] += 1
-							info[roadTeam].conferenceRecord[0] += 1
+							teamInfo[homeTeam].conferenceRecord[1] += 1
+							teamInfo[roadTeam].conferenceRecord[0] += 1
 
-							info[homeTeam].games[i] = {
+							teamInfo[homeTeam].games[i] = {
 								isCompleted: true,
 								result: "loss",
 								score: parseInt(game.competitions[0].competitors[0].score),
@@ -192,7 +194,7 @@ exports.handler = async (event) => {
 								oppScore: parseInt(game.competitions[0].competitors[1].score),
 							}
 
-							info[roadTeam].games[i] = {
+							teamInfo[roadTeam].games[i] = {
 								isCompleted: true,
 								result: "win",
 								score: parseInt(game.competitions[0].competitors[1].score),
@@ -206,10 +208,10 @@ exports.handler = async (event) => {
 					  
 						// Tie
 						if(!game.competitions[0].competitors[0].winner && !game.competitions[0].competitors[1].winner){
-							info[homeTeam].overallRecord[2] += 1
-							info[roadTeam].overallRecord[2] += 1
+							teamInfo[homeTeam].overallRecord[2] += 1
+							teamInfo[roadTeam].overallRecord[2] += 1
 
-							info[homeTeam].games[i] = {
+							teamInfo[homeTeam].games[i] = {
 								isCompleted: true,
 								result: "tie",
 								score: parseInt(game.competitions[0].competitors[0].score),
@@ -217,7 +219,7 @@ exports.handler = async (event) => {
 								oppScore: parseInt(game.competitions[0].competitors[1].score),
 							}
 
-							info[roadTeam].games[i] = {
+							teamInfo[roadTeam].games[i] = {
 								isCompleted: true,
 								result: "tie",
 								score: parseInt(game.competitions[0].competitors[1].score),
@@ -227,10 +229,10 @@ exports.handler = async (event) => {
 							
 						// Home Win
 						} else if (game.competitions[0].competitors[0].winner){
-							info[homeTeam].overallRecord[0] += 1
-							info[roadTeam].overallRecord[1] += 1
+							teamInfo[homeTeam].overallRecord[0] += 1
+							teamInfo[roadTeam].overallRecord[1] += 1
 
-							info[homeTeam].games[i] = {
+							teamInfo[homeTeam].games[i] = {
 								isCompleted: true,
 								result: "win",
 								score: parseInt(game.competitions[0].competitors[0].score),
@@ -238,7 +240,7 @@ exports.handler = async (event) => {
 								oppScore: parseInt(game.competitions[0].competitors[1].score),
 							}
 
-							info[roadTeam].games[i] = {
+							teamInfo[roadTeam].games[i] = {
 								isCompleted: true,
 								result: "loss",
 								score: parseInt(game.competitions[0].competitors[1].score),
@@ -248,10 +250,10 @@ exports.handler = async (event) => {
 							
 						// Road Win
 						} else if (game.competitions[0].competitors[1].winner){					
-							info[homeTeam].overallRecord[1] += 1
-							info[roadTeam].overallRecord[0] += 1
+							teamInfo[homeTeam].overallRecord[1] += 1
+							teamInfo[roadTeam].overallRecord[0] += 1
 
-							info[homeTeam].games[i] = {
+							teamInfo[homeTeam].games[i] = {
 								isCompleted: true,
 								result: "loss",
 								score: parseInt(game.competitions[0].competitors[0].score),
@@ -259,7 +261,7 @@ exports.handler = async (event) => {
 								oppScore: parseInt(game.competitions[0].competitors[1].score),
 							}
 
-							info[roadTeam].games[i] = {
+							teamInfo[roadTeam].games[i] = {
 								isCompleted: true,
 								result: "win",
 								score: parseInt(game.competitions[0].competitors[1].score),
@@ -271,7 +273,7 @@ exports.handler = async (event) => {
 					
 				// Incomplete Game
 				} else {
-					info[homeTeam].games[i] = {
+					teamInfo[homeTeam].games[i] = {
 						isCompleted: false,
 						result: "",
 						score: 0,
@@ -279,7 +281,7 @@ exports.handler = async (event) => {
 						oppScore: 0,
 					}
 
-					info[roadTeam].games[i] = {
+					teamInfo[roadTeam].games[i] = {
 						isCompleted: false,
 						result: "",
 						score: 0,
@@ -289,27 +291,49 @@ exports.handler = async (event) => {
 				}
       })
     }
-    
-
   }
+  
+  const nfcEastTeams = getTeamsByDivision('NFC', 'East', teamInfo)
+  const nfcEastTeamsSorted = getDivisionStandings(nfcEastTeams)
+  
+  const nfcNorthTeams = getTeamsByDivision('NFC', 'North', teamInfo)
+  const nfcNorthTeamsSorted = getDivisionStandings(nfcNorthTeams)
+  
+  const nfcSouthTeams = getTeamsByDivision('NFC', 'South', teamInfo)
+  const nfcSouthTeamsSorted = getDivisionStandings(nfcSouthTeams)
+  
+  const nfcWestTeams = getTeamsByDivision('NFC', 'West', teamInfo)
+  const nfcWestTeamsSorted = getDivisionStandings(nfcWestTeams)
+  
+  const afcEastTeams = getTeamsByDivision('AFC', 'East', teamInfo)
+  const afcEastTeamsSorted = getDivisionStandings(afcEastTeams)
+  
+  const afcNorthTeams = getTeamsByDivision('AFC', 'North', teamInfo)
+  const afcNorthTeamsSorted = getDivisionStandings(afcNorthTeams)
+  
+  const afcSouthTeams = getTeamsByDivision('AFC', 'South', teamInfo)
+  const afcSouthTeamsSorted = getDivisionStandings(afcSouthTeams)
+  
+  const afcWestTeams = getTeamsByDivision('AFC', 'West', teamInfo)
+  const afcWestTeamsSorted = getDivisionStandings(afcWestTeams)
   
   const allData = {
     version: "1.0",
     time: "",
-    teamInfoToDate: info,
+    teamInfoToDate: teamInfo,
 
-    nfcEastStandings: [],
-    nfcNorthStandings: [],
-    nfcSouthStandings: [],
-    nfcWestStandings: [],
+    nfcEastStandings: nfcEastTeamsSorted,
+    nfcNorthStandings: nfcNorthTeamsSorted,
+    nfcSouthStandings: nfcSouthTeamsSorted,
+    nfcWestStandings: nfcWestTeamsSorted,
 
     nfcDivisionChamps: [],
     nfcWildCardTeams: [],
 
-    afcEastStandings: [],
-    afcNorthStandings: [],
-    afcSouthStandings: [],
-    afcWestStandings: [],
+    afcEastStandings: afcEastTeamsSorted,
+    afcNorthStandings: afcNorthTeamsSorted,
+    afcSouthStandings: afcSouthTeamsSorted,
+    afcWestStandings: afcWestTeamsSorted,
 
     afcDivisionChamps: [],
     afcWildCardTeams: [],
@@ -319,7 +343,7 @@ exports.handler = async (event) => {
     statusCode: 200,
     body: JSON.stringify(allData),
   }
-   
+   //return getWonLostTiedPercentage(allData.teamInfoToDate['GB'].overallRecord)
   return response
 }
 
@@ -328,6 +352,7 @@ function getDefaultTeamInfo() {
 
 	teams['ARI'] = {
 		location: 'Arizona',
+		abbreviation: 'ARI',
 		alternateName: null,
 		conference: 'NFC',
 		division: 'West',
@@ -339,6 +364,7 @@ function getDefaultTeamInfo() {
 
 	teams['ATL'] = {
 		location: 'Atlanta',
+		abbreviation: 'ATL',
 		alternateName: null,
 		conference: 'NFC',
 		division: 'South',
@@ -350,6 +376,7 @@ function getDefaultTeamInfo() {
 
 	teams['BAL'] = {
 		location: 'Baltimore',
+		abbreviation: 'BAL',
 		alternateName: null,
 		conference: 'AFC',
 		division: 'North',
@@ -361,6 +388,7 @@ function getDefaultTeamInfo() {
 
 	teams['BUF'] = {
 		location: 'Buffalo',
+		abbreviation: 'BUF',
 		alternateName: null,
 		conference: 'AFC',
 		division: 'East',
@@ -372,6 +400,7 @@ function getDefaultTeamInfo() {
 
 	teams['CAR'] = {
 		location: 'Carolina',
+		abbreviation: 'CAR',
 		alternateName: null,
 		conference: 'NFC',
 		division: 'South',
@@ -383,6 +412,7 @@ function getDefaultTeamInfo() {
 
 	teams['CHI'] = {
 		location: 'Chicago',
+		abbreviation: 'CHI',
 		alternateName: null,
 		conference: 'NFC',
 		division: 'North',
@@ -394,6 +424,7 @@ function getDefaultTeamInfo() {
 
 	teams['CIN'] = {
 		location: 'Cincinnati',
+		abbreviation: 'CIN',
 		alternateName: null,
 		conference: 'AFC',
 		division: 'North',
@@ -405,6 +436,7 @@ function getDefaultTeamInfo() {
 
 	teams['CLE'] = {
 		location: 'Cleveland',
+		abbreviation: 'CLE',
 		alternateName: null,
 		conference: 'AFC',
 		division: 'North',
@@ -416,6 +448,7 @@ function getDefaultTeamInfo() {
 
 	teams['DAL'] = {
 		location: 'Dallas',
+		abbreviation: 'DAL',
 		alternateName: null,
 		conference: 'NFC',
 		division: 'East',
@@ -427,6 +460,7 @@ function getDefaultTeamInfo() {
 
 	teams['DEN'] = {
 		location: 'Denver',
+		abbreviation: 'DEN',
 		alternateName: null,
 		conference: 'AFC',
 		division: 'West',
@@ -438,6 +472,7 @@ function getDefaultTeamInfo() {
 
 	teams['DET'] = {
 		location: 'Detroit',
+		abbreviation: 'DET',
 		alternateName: null,
 		conference: 'NFC',
 		division: 'North',
@@ -449,6 +484,7 @@ function getDefaultTeamInfo() {
 
 	teams['GB'] = {
 		location: 'Green Bay',
+		abbreviation: 'GB',
 		alternateName: null,
 		conference: 'NFC',
 		division: 'North',
@@ -460,6 +496,7 @@ function getDefaultTeamInfo() {
 
 	teams['HOU'] = {
 		location: 'Houston',
+		abbreviation: 'HOU',
 		alternateName: null,
 		conference: 'AFC',
 		division: 'South',
@@ -471,6 +508,7 @@ function getDefaultTeamInfo() {
 
 	teams['IND'] = {
 		location: 'Indianapolis',
+		abbreviation: 'IND',
 		alternateName: null,
 		conference: 'AFC',
 		division: 'South',
@@ -482,6 +520,7 @@ function getDefaultTeamInfo() {
 
 	teams['JAX'] = {
 		location: 'Jacksonville',
+		abbreviation: 'JAX',
 		alternateName: null,
 		conference: 'AFC',
 		division: 'South',
@@ -493,6 +532,7 @@ function getDefaultTeamInfo() {
 
 	teams['KC'] = {
 		location: 'Kansas City',
+		abbreviation: 'KC',
 		alternateName: null,
 		conference: 'AFC',
 		division: 'West',
@@ -504,6 +544,7 @@ function getDefaultTeamInfo() {
 
 	teams['LV'] = {
 		location: 'Las Vegas',
+		abbreviation: 'LV',
 		alternateName: null,
 		conference: 'AFC',
 		division: 'West',
@@ -515,6 +556,7 @@ function getDefaultTeamInfo() {
 
 	teams['LAC'] = {
 		location: 'Los Angeles',
+		abbreviation: 'LAC',
 		alternateName: 'LA Chargers',
 		conference: 'AFC',
 		division: 'West',
@@ -526,6 +568,7 @@ function getDefaultTeamInfo() {
 
 	teams['LAR'] = {
 		location: 'Los Angeles',
+		abbreviation: 'LAR',
 		alternateName: 'LA Rams',
 		conference: 'NFC',
 		division: 'West',
@@ -537,6 +580,7 @@ function getDefaultTeamInfo() {
 
 	teams['MIA'] = {
 		location: 'Miami',
+		abbreviation: 'MIA',
 		alternateName: null,
 		conference: 'AFC',
 		division: 'East',
@@ -548,6 +592,7 @@ function getDefaultTeamInfo() {
 
 	teams['MIN'] = {
 		location: 'Minnesota',
+		abbreviation: 'MIN',
 		alternateName: null,
 		conference: 'NFC',
 		division: 'North',
@@ -559,6 +604,7 @@ function getDefaultTeamInfo() {
 
 	teams['NE'] = {
 		location: 'New England',
+		abbreviation: 'NE',
 		alternateName: null,
 		conference: 'AFC',
 		division: 'East',
@@ -570,6 +616,7 @@ function getDefaultTeamInfo() {
 
 	teams['NO'] = {
 		location: 'New Orleans',
+		abbreviation: 'NO',
 		alternateName: null,
 		conference: 'NFC',
 		division: 'South',
@@ -581,6 +628,7 @@ function getDefaultTeamInfo() {
 
 	teams['NYG'] = {
 		location: 'New York',
+		abbreviation: 'NYG',
 		alternateName: "NY Giants",
 		conference: 'NFC',
 		division: 'East',
@@ -592,6 +640,7 @@ function getDefaultTeamInfo() {
 
 	teams['NYJ'] = {
 		location: 'New York',
+		abbreviation: 'NYJ',
 		alternateName: 'NY Jets',
 		conference: 'AFC',
 		division: 'East',
@@ -603,6 +652,7 @@ function getDefaultTeamInfo() {
 
 	teams['PHI'] = {
 		location: 'Philadelphia',
+		abbreviation: 'PHI',
 		alternateName: null,
 		conference: 'NFC',
 		division: 'East',
@@ -614,6 +664,7 @@ function getDefaultTeamInfo() {
 
 	teams['PIT'] = {
 		location: 'Pittsburgh',
+		abbreviation: 'PIT',
 		alternateName: null,
 		conference: 'AFC',
 		division: 'North',
@@ -625,6 +676,7 @@ function getDefaultTeamInfo() {
 
 	teams['SF'] = {
 		location: 'San Francisco',
+		abbreviation: 'SF',
 		alternateName: null,
 		conference: 'NFC',
 		division: 'West',
@@ -636,6 +688,7 @@ function getDefaultTeamInfo() {
 
 	teams['SEA'] = {
 		location: 'Seattle',
+		abbreviation: 'SEA',
 		alternateName: null,
 		conference: 'NFC',
 		division: 'West',
@@ -647,6 +700,7 @@ function getDefaultTeamInfo() {
 
 	teams['TB'] = {
 		location: 'Tampa Bay',
+		abbreviation: 'TB',
 		alternateName: null,
 		conference: 'NFC',
 		division: 'South',
@@ -658,6 +712,7 @@ function getDefaultTeamInfo() {
 
 	teams['TEN'] = {
 		location: 'Tennessee',
+		abbreviation: 'TEN',
 		alternateName: null,
 		conference: 'AFC',
 		division: 'South',
@@ -669,6 +724,7 @@ function getDefaultTeamInfo() {
 
 	teams['WSH'] = {
 		location: 'Washington',
+		abbreviation: 'WSH',
 		alternateName: null,
 		conference: 'NFC',
 		division: 'East',
@@ -679,4 +735,78 @@ function getDefaultTeamInfo() {
 	}
 
     return teams
+}
+
+function getTeamsByDivision(conference, division, teamInfo) {
+	const divisionTeams = []
+	for (const team of Object.keys(teamInfo)) {
+		if(teamInfo[team].conference === conference && teamInfo[team].division === division){
+			divisionTeams.push(teamInfo[team])
+	  }
+	}
+	return divisionTeams
+}
+
+function getDivisionStandings(divisionTeams){
+	//returns array of divison teams sorted
+	
+	//sort by games 
+  const sortedStandings = sortOnlyByRecord(divisionTeams)
+
+	const wonLostTiedPercentage0 = getWonLostTiedPercentage(sortedStandings[0].overallRecord)
+	const wonLostTiedPercentage1 = getWonLostTiedPercentage(sortedStandings[1].overallRecord)
+	const wonLostTiedPercentage2 = getWonLostTiedPercentage(sortedStandings[2].overallRecord)
+	const wonLostTiedPercentage3 = getWonLostTiedPercentage(sortedStandings[3].overallRecord)
+
+	//Four Way Tie
+	if(wonLostTiedPercentage0 === wonLostTiedPercentage1 &&
+	   wonLostTiedPercentage0 === wonLostTiedPercentage2 && 
+	   wonLostTiedPercentage0 === wonLostTiedPercentage3) {
+	   	
+	 }
+	 //Three Way Tie
+	 else if(wonLostTiedPercentage0 === wonLostTiedPercentage1 &&
+			 wonLostTiedPercentage0 === wonLostTiedPercentage2) {
+	 	
+	 }
+	 else if(wonLostTiedPercentage0 === wonLostTiedPercentage1 &&
+			 wonLostTiedPercentage0 === wonLostTiedPercentage3) {
+	 	
+	 }
+	 else if(wonLostTiedPercentage0 === wonLostTiedPercentage2 &&
+			 wonLostTiedPercentage0 === wonLostTiedPercentage3) {
+	 	
+	 }
+	 else if(wonLostTiedPercentage1 === wonLostTiedPercentage2 &&
+			 wonLostTiedPercentage1 === wonLostTiedPercentage3) {
+	 	
+	 }
+	 else {
+	 	//sort completley
+	 }
+	//if four way tie remove odd one
+	//if three way tie
+	//if two way tie
+	//const sortedStandings = 
+	return sortedStandings
+}
+
+function sortOnlyByRecord(divsionTeams){
+  const sorted = divsionTeams.sort(function (x, y) {
+  	var diff = getWonLostTiedPercentage(y.overallRecord) - getWonLostTiedPercentage(x.overallRecord)
+    return diff
+  })
+  return sorted
+}
+
+function getWonLostTiedPercentage(record){
+	const totalGames = record[0] + record[1] + record[2]
+	if(totalGames === 0){
+		return 0
+	}
+	return (record[0] + (record[2] * 0.500)) / totalGames
+}
+
+function sortCompletely(divisionTeams){
+	return divisionTeams
 }
