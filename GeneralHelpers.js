@@ -1,3 +1,5 @@
+import Axios from 'axios'
+
 export function getDefaultTeamInfo() {
     const teams = {}
   
@@ -387,6 +389,283 @@ export function getDefaultTeamInfo() {
   
       return teams
   }
+
+export function getUpdatedTeamInfo() {
+	const teamInfo = getDefaultTeamInfo()
+	
+	for (let i = 1; i <= 18; i++) {    
+		Axios.get(`https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?dates=2021&seasontype=2&week=${i}`)
+			.then((response) => {
+				response.data.events.forEach((game) => {
+					const homeTeam = game.competitions[0].competitors[0].team.abbreviation
+					const roadTeam = game.competitions[0].competitors[1].team.abbreviation
+					const homeConference = info[homeTeam].conference
+					const roadConference = info[roadTeam].conference
+					const homeDivision = info[homeTeam].division 
+					const roadDivision = info[roadTeam].division 
+
+					// Complete Game
+					if(game.competitions[0].status.type.completed) {
+						
+						// Same Division
+						if(homeConference === roadConference && homeDivision === roadDivision) {
+							
+							// Tie
+							if(!game.competitions[0].competitors[0].winner && !game.competitions[0].competitors[1].winner){
+								teamInfo[homeTeam].overallRecord[2] += 1
+								teamInfo[roadTeam].overallRecord[2] += 1
+
+								teamInfo[homeTeam].conferenceRecord[2] += 1
+								teamInfo[roadTeam].conferenceRecord[2] += 1
+
+								teamInfo[homeTeam].divisionRecord[2] += 1
+								teamInfo[roadTeam].divisionRecord[2] += 1
+
+								teamInfo[homeTeam].games[i] = {
+									isCompleted: true,
+									result: "tie",
+									score: parseInt(game.competitions[0].competitors[0].score),
+									opponent: roadTeam,
+									oppScore: parseInt(game.competitions[0].competitors[1].score),
+								}
+
+								teamInfo[roadTeam].games[i] = {
+									isCompleted: true,
+									result: "tie",
+									score: parseInt(game.competitions[0].competitors[1].score),
+									opponent: homeTeam,
+									oppScore: parseInt(game.competitions[0].competitors[0].score),
+								}
+									
+							// Home Win
+							} else if (game.competitions[0].competitors[0].winner){
+								teamInfo[homeTeam].overallRecord[0] += 1
+								teamInfo[roadTeam].overallRecord[1] += 1
+
+								teamInfo[homeTeam].conferenceRecord[0] += 1
+								teamInfo[roadTeam].conferenceRecord[1] += 1
+
+								teamInfo[homeTeam].divisionRecord[0] += 1
+								teamInfo[roadTeam].divisionRecord[1] += 1
+
+								teamInfo[homeTeam].games[i] = {
+									isCompleted: true,
+									result: "win",
+									score: parseInt(game.competitions[0].competitors[0].score),
+									opponent: roadTeam,
+									oppScore: parseInt(game.competitions[0].competitors[1].score),
+								}
+
+								teamInfo[roadTeam].games[i] = {
+									isCompleted: true,
+									result: "loss",
+									score: parseInt(game.competitions[0].competitors[1].score),
+									opponent: homeTeam,
+									oppScore: parseInt(game.competitions[0].competitors[0].score),
+								}
+							
+							// Road Win
+							} else if (game.competitions[0].competitors[1].winner){					
+								teamInfo[homeTeam].overallRecord[1] += 1
+								teamInfo[roadTeam].overallRecord[0] += 1
+
+								teamInfo[homeTeam].conferenceRecord[1] += 1
+								teamInfo[roadTeam].conferenceRecord[0] += 1
+
+								teamInfo[homeTeam].divisionRecord[1] += 1
+								teamInfo[roadTeam].divisionRecord[0] += 1
+
+								teamInfo[homeTeam].games[i] = {
+									isCompleted: true,
+									result: "loss",
+									score: parseInt(game.competitions[0].competitors[0].score),
+									opponent: roadTeam,
+									oppScore: parseInt(game.competitions[0].competitors[1].score),
+								}
+
+								teamInfo[roadTeam].games[i] = {
+									isCompleted: true,
+									result: "win",
+									score: parseInt(game.competitions[0].competitors[1].score),
+									opponent: homeTeam,
+									oppScore: parseInt(game.competitions[0].competitors[0].score),
+								}
+							}
+							
+						// Same Conference
+						} else if(homeConference === roadConference) {
+							
+							// Tie
+							if(!game.competitions[0].competitors[0].winner && !game.competitions[0].competitors[1].winner){
+								teamInfo[homeTeam].overallRecord[2] += 1
+								teamInfo[roadTeam].overallRecord[2] += 1
+
+								teamInfo[homeTeam].conferenceRecord[2] += 1
+								teamInfo[roadTeam].conferenceRecord[2] += 1
+
+								teamInfo[homeTeam].games[i] = {
+									isCompleted: true,
+									result: "tie",
+									score: parseInt(game.competitions[0].competitors[0].score),
+									opponent: roadTeam,
+									oppScore: parseInt(game.competitions[0].competitors[1].score),
+								}
+
+								teamInfo[roadTeam].games[i] = {
+									isCompleted: true,
+									result: "tie",
+									score: parseInt(game.competitions[0].competitors[1].score),
+									opponent: homeTeam,
+									oppScore: parseInt(game.competitions[0].competitors[0].score),
+								}
+							
+							// Home Win
+							} else if (game.competitions[0].competitors[0].winner){
+								teamInfo[homeTeam].overallRecord[0] += 1
+								teamInfo[roadTeam].overallRecord[1] += 1
+
+								teamInfo[homeTeam].conferenceRecord[0] += 1
+								teamInfo[roadTeam].conferenceRecord[1] += 1
+
+								teamInfo[homeTeam].games[i] = {
+									isCompleted: true,
+									result: "win",
+									score: parseInt(game.competitions[0].competitors[0].score),
+									opponent: roadTeam,
+									oppScore: parseInt(game.competitions[0].competitors[1].score),
+								}
+
+								teamInfo[roadTeam].games[i] = {
+									isCompleted: true,
+									result: "loss",
+									score: parseInt(game.competitions[0].competitors[1].score),
+									opponent: homeTeam,
+									oppScore: parseInt(game.competitions[0].competitors[0].score),
+								}
+								
+							// Road Win
+							} else if (game.competitions[0].competitors[1].winner){					
+								teamInfo[homeTeam].overallRecord[1] += 1
+								teamInfo[roadTeam].overallRecord[0] += 1
+
+								teamInfo[homeTeam].conferenceRecord[1] += 1
+								teamInfo[roadTeam].conferenceRecord[0] += 1
+
+								teamInfo[homeTeam].games[i] = {
+									isCompleted: true,
+									result: "loss",
+									score: parseInt(game.competitions[0].competitors[0].score),
+									opponent: roadTeam,
+									oppScore: parseInt(game.competitions[0].competitors[1].score),
+								}
+
+								teamInfo[roadTeam].games[i] = {
+									isCompleted: true,
+									result: "win",
+									score: parseInt(game.competitions[0].competitors[1].score),
+									opponent: homeTeam,
+									oppScore: parseInt(game.competitions[0].competitors[0].score),
+								}
+							}
+						
+						// Different Conference
+						} else {
+							
+							// Tie
+							if(!game.competitions[0].competitors[0].winner && !game.competitions[0].competitors[1].winner){
+								teamInfo[homeTeam].overallRecord[2] += 1
+								teamInfo[roadTeam].overallRecord[2] += 1
+
+								teamInfo[homeTeam].games[i] = {
+									isCompleted: true,
+									result: "tie",
+									score: parseInt(game.competitions[0].competitors[0].score),
+									opponent: roadTeam,
+									oppScore: parseInt(game.competitions[0].competitors[1].score),
+								}
+
+								teamInfo[roadTeam].games[i] = {
+									isCompleted: true,
+									result: "tie",
+									score: parseInt(game.competitions[0].competitors[1].score),
+									opponent: homeTeam,
+									oppScore: parseInt(game.competitions[0].competitors[0].score),
+								}
+								
+							// Home Win
+							} else if (game.competitions[0].competitors[0].winner){
+								teamInfo[homeTeam].overallRecord[0] += 1
+								teamInfo[roadTeam].overallRecord[1] += 1
+
+								teamInfo[homeTeam].games[i] = {
+									isCompleted: true,
+									result: "win",
+									score: parseInt(game.competitions[0].competitors[0].score),
+									opponent: roadTeam,
+									oppScore: parseInt(game.competitions[0].competitors[1].score),
+								}
+
+								teamInfo[roadTeam].games[i] = {
+									isCompleted: true,
+									result: "loss",
+									score: parseInt(game.competitions[0].competitors[1].score),
+									opponent: homeTeam,
+									oppScore: parseInt(game.competitions[0].competitors[0].score),
+								}
+							
+							// Road Win
+							} else if (game.competitions[0].competitors[1].winner){					
+								teamInfo[homeTeam].overallRecord[1] += 1
+								teamInfo[roadTeam].overallRecord[0] += 1
+
+								teamInfo[homeTeam].games[i] = {
+									isCompleted: true,
+									result: "loss",
+									score: parseInt(game.competitions[0].competitors[0].score),
+									opponent: roadTeam,
+									oppScore: parseInt(game.competitions[0].competitors[1].score),
+								}
+
+								teamInfo[roadTeam].games[i] = {
+									isCompleted: true,
+									result: "win",
+									score: parseInt(game.competitions[0].competitors[1].score),
+									opponent: homeTeam,
+									oppScore: parseInt(game.competitions[0].competitors[0].score),
+								}
+							}
+						}
+						
+					// Incomplete Game
+					} else {
+						teamInfo[homeTeam].games[i] = {
+							isCompleted: false,
+							result: "",
+							score: 0,
+							opponent: roadTeam,
+							oppScore: 0,
+						}
+
+						teamInfo[roadTeam].games[i] = {
+							isCompleted: false,
+							result: "",
+							score: 0,
+							opponent: homeTeam,
+							oppScore: 0,
+						}
+					}
+      	})
+			})
+			.catch((error) => {
+				//TODO
+				alert('Failed to retrieve movie data')
+				console.error('Failed to retrieve movie data')
+				console.error(error)
+			})
+  }
+
+	return teamInfo
+}
 
 export function sortOnlyByRecord(teams){
   const sorted = teams.sort(function (x, y) {
