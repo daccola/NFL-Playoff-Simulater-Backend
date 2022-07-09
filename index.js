@@ -4,7 +4,10 @@ import { getTeamsByDivision, getDivisionStandings } from './DivisionHelpers.js'
 //getDivisionStandings
 //const https = require('https')
 import https from 'https'
-exports.handler = async (event) => {
+
+export const handler = async () => {
+
+//exports.handler = async (event) => {
   const teamInfo = getDefaultTeamInfo()
 
 const year = '2021'
