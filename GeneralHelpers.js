@@ -390,19 +390,19 @@ export function getDefaultTeamInfo() {
       return teams
   }
 
-export function getUpdatedTeamInfo() {
+export async function getUpdatedTeamInfo() {
 	const teamInfo = getDefaultTeamInfo()
-	
+
 	for (let i = 1; i <= 18; i++) {    
 		Axios.get(`https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?dates=2021&seasontype=2&week=${i}`)
 			.then((response) => {
 				response.data.events.forEach((game) => {
 					const homeTeam = game.competitions[0].competitors[0].team.abbreviation
 					const roadTeam = game.competitions[0].competitors[1].team.abbreviation
-					const homeConference = info[homeTeam].conference
-					const roadConference = info[roadTeam].conference
-					const homeDivision = info[homeTeam].division 
-					const roadDivision = info[roadTeam].division 
+					const homeConference = teamInfo[homeTeam].conference
+					const roadConference = teamInfo[roadTeam].conference
+					const homeDivision = teamInfo[homeTeam].division 
+					const roadDivision = teamInfo[roadTeam].division 
 
 					// Complete Game
 					if(game.competitions[0].status.type.completed) {
