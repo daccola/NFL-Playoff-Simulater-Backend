@@ -1,4 +1,4 @@
-import { getDefaultTeamInfo, getUpdatedTeamInfo } from './GeneralHelpers.js'
+import { getUpdatedTeamInfo } from './TeamInfoHelpers.js'
 import { getTeamsByDivision, getDivisionStandings } from './DivisionHelpers.js'
 //getTeamsByDivision
 //getDivisionStandings
@@ -9,9 +9,9 @@ export const handler = async () => {
 
 //exports.handler = async (event) => {
   //const teamInfo = getDefaultTeamInfo()
-  const teamInfo = await getUpdatedTeamInfo()
+  const teamInfo = await getUpdatedTeamInfo('2021')
 
-const year = '2021'
+//const year = '2021'
 
 	//Gets game info for all 18 weeks
   
