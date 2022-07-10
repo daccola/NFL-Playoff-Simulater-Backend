@@ -3,30 +3,16 @@ import { getTeamsByDivision, getDivisionStandings } from './DivisionHelpers.js'
 
 export const handler = async () => {
   const teamInfo = await getUpdatedTeamInfo('2021')
-	
-  const nfcEastTeams = getTeamsByDivision('NFC', 'East', teamInfo)
-  const nfcEastTeamsSorted = getDivisionStandings(nfcEastTeams)
+
+  const nfcEastTeamsSorted = getDivisionStandings('NFC', 'East', teamInfo)  
+  const nfcNorthTeamsSorted = getDivisionStandings('NFC', 'North', teamInfo)
+  const nfcSouthTeamsSorted = getDivisionStandings('NFC', 'South', teamInfo)  
+  const nfcWestTeamsSorted = getDivisionStandings('NFC', 'West', teamInfo)
   
-  const nfcNorthTeams = getTeamsByDivision('NFC', 'North', teamInfo)
-  const nfcNorthTeamsSorted = getDivisionStandings(nfcNorthTeams)
-  
-  const nfcSouthTeams = getTeamsByDivision('NFC', 'South', teamInfo)
-  const nfcSouthTeamsSorted = getDivisionStandings(nfcSouthTeams)
-  
-  const nfcWestTeams = getTeamsByDivision('NFC', 'West', teamInfo)
-  const nfcWestTeamsSorted = getDivisionStandings(nfcWestTeams)
-  
-  const afcEastTeams = getTeamsByDivision('AFC', 'East', teamInfo)
-  const afcEastTeamsSorted = getDivisionStandings(afcEastTeams)
-  
-  const afcNorthTeams = getTeamsByDivision('AFC', 'North', teamInfo)
-  const afcNorthTeamsSorted = getDivisionStandings(afcNorthTeams)
-  
-  const afcSouthTeams = getTeamsByDivision('AFC', 'South', teamInfo)
-  const afcSouthTeamsSorted = getDivisionStandings(afcSouthTeams)
-  
-  const afcWestTeams = getTeamsByDivision('AFC', 'West', teamInfo)
-  const afcWestTeamsSorted = getDivisionStandings(afcWestTeams)
+  const afcEastTeamsSorted = getDivisionStandings('AFC', 'East', teamInfo)  
+  const afcNorthTeamsSorted = getDivisionStandings('AFC', 'North', teamInfo)  
+  const afcSouthTeamsSorted = getDivisionStandings('AFC', 'South', teamInfo)  
+  const afcWestTeamsSorted = getDivisionStandings('AFC', 'West', teamInfo)
   
   const allData = {
     version: "1.0",

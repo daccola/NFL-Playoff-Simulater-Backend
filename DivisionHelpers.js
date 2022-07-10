@@ -10,9 +10,10 @@ export function getTeamsByDivision(conference, division, teamInfo) {
 	return divisionTeams
 }
 
-export function getDivisionStandings(divisionTeams){
+export function getDivisionStandings(conference, division, teamInfo){
 	//returns array of divison teams sorted
 	
+	const divisionTeams = getTeamsByDivision(conference, division, teamInfo)
 	//sort by games 
   const sortedStandings = sortOnlyByRecord(divisionTeams)
 
