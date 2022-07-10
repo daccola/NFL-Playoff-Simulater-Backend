@@ -14,6 +14,10 @@ export const handler = async () => {
   const afcSouthTeamsSorted = getDivisionStandings('AFC', 'South', teamInfo)  
   const afcWestTeamsSorted = getDivisionStandings('AFC', 'West', teamInfo)
   
+  //TODO Update
+  const nfcDivisionSeeds = [nfcEastTeamsSorted[0], nfcNorthTeamsSorted[0], nfcSouthTeamsSorted[0], nfcWestTeamsSorted[0]]
+  const afcDivisionSeeds = [afcEastTeamsSorted[0], afcNorthTeamsSorted[0], afcSouthTeamsSorted[0], afcWestTeamsSorted[0]]
+
   const allData = {
     version: "1.0",
     time: "",
@@ -24,7 +28,7 @@ export const handler = async () => {
     nfcSouthStandings: nfcSouthTeamsSorted,
     nfcWestStandings: nfcWestTeamsSorted,
 
-    nfcDivisionChamps: [],
+    nfcDivisionChamps: nfcDivisionSeeds,
     nfcWildCardTeams: [],
 
     afcEastStandings: afcEastTeamsSorted,
@@ -32,7 +36,7 @@ export const handler = async () => {
     afcSouthStandings: afcSouthTeamsSorted,
     afcWestStandings: afcWestTeamsSorted,
 
-    afcDivisionChamps: [],
+    afcDivisionChamps: afcDivisionSeeds,
     afcWildCardTeams: [],
   }
   
