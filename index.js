@@ -1,5 +1,5 @@
 import { getUpdatedTeamInfo } from './TeamInfoHelpers.js'
-import { getTeamsByDivision, getDivisionStandings } from './DivisionHelpers.js'
+import { getDivisionStandings } from './DivisionHelpers.js'
 
 export const handler = async () => {
   const teamInfo = await getUpdatedTeamInfo('2021')

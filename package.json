@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "axios": "^0.27.2",
+    "file-system": "^1.2.2",
     "https": "^1.0.0"
   }
 }
