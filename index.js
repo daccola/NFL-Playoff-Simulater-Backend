@@ -18,6 +18,11 @@ export const handler = async () => {
   const nfcDivisionSeeds = [nfcEastTeamsSorted[0], nfcNorthTeamsSorted[0], nfcSouthTeamsSorted[0], nfcWestTeamsSorted[0]]
   const afcDivisionSeeds = [afcEastTeamsSorted[0], afcNorthTeamsSorted[0], afcSouthTeamsSorted[0], afcWestTeamsSorted[0]]
 
+
+  //TODO Temp WildCard Teams
+  const nfcWildCardSeeds = [nfcEastTeamsSorted[3], nfcNorthTeamsSorted[3], nfcSouthTeamsSorted[3]]
+  const afcWildCardSeeds = [afcEastTeamsSorted[3], afcNorthTeamsSorted[3], afcSouthTeamsSorted[3]]
+
   const allData = {
     version: "1.0",
     time: "",
@@ -29,7 +34,7 @@ export const handler = async () => {
     nfcWestStandings: nfcWestTeamsSorted,
 
     nfcDivisionChamps: nfcDivisionSeeds,
-    nfcWildCardTeams: [],
+    nfcWildCardTeams: nfcWildCardSeeds,
 
     afcEastStandings: afcEastTeamsSorted,
     afcNorthStandings: afcNorthTeamsSorted,
@@ -37,7 +42,7 @@ export const handler = async () => {
     afcWestStandings: afcWestTeamsSorted,
 
     afcDivisionChamps: afcDivisionSeeds,
-    afcWildCardTeams: [],
+    afcWildCardTeams: afcWildCardSeeds,
   }
   
   const response = {
