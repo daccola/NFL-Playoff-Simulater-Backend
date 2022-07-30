@@ -15,7 +15,7 @@ export function getDivisionStandings(conference, division, teamInfo){
 	
 	const divisionTeams = getTeamsByDivision(conference, division, teamInfo)
 	//sort by games 
-  const sortedStandings = sortOnlyByRecord(divisionTeams)
+  	const sortedStandings = sortOnlyByRecord(divisionTeams)
 
 	const wonLostTiedPercentage0 = getWonLostTiedPercentage(sortedStandings[0].overallRecord)
 	const wonLostTiedPercentage1 = getWonLostTiedPercentage(sortedStandings[1].overallRecord)
