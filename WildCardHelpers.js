@@ -1,6 +1,6 @@
 import { sortOnlyByRecord } from './GeneralHelpers.js'
 
-export function getDivisionStandings(conference, divisionChamps, teamInfo) {
+export function getWildCardTeams (conference, divisionChamps, teamInfo) {
   const potentialWildCardTeams = removeInvalidTeams(conference, divisionChamps, teamInfo)
 	const sortedWildCardTeams = sortOnlyByRecord(potentialWildCardTeams)
 

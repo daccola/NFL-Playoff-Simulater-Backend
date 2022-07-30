@@ -1,5 +1,6 @@
 import { getUpdatedTeamInfo } from './TeamInfoHelpers.js'
 import { getDivisionStandings } from './DivisionHelpers.js'
+import { getWildCardTeams } from './WildCardHelpers.js'
 
 export const handler = async () => {
   const teamInfo = await getUpdatedTeamInfo('2021')
@@ -20,8 +21,8 @@ export const handler = async () => {
 
 
   //TODO Temp WildCard Teams
-  const nfcWildCardSeeds = [nfcEastTeamsSorted[3], nfcNorthTeamsSorted[3], nfcSouthTeamsSorted[3]]
-  const afcWildCardSeeds = [afcEastTeamsSorted[3], afcNorthTeamsSorted[3], afcSouthTeamsSorted[3]]
+  const nfcWildCardSeeds = getWildCardTeams('NFC', nfcDivisionSeeds, teamInfo)
+  const afcWildCardSeeds = getWildCardTeams('AFC', afcDivisionSeeds, teamInfo)
 
   const allData = {
     version: "1.0",
