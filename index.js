@@ -19,7 +19,6 @@ export const handler = async () => {
   const nfcDivisionSeeds = [nfcEastTeamsSorted[0], nfcNorthTeamsSorted[0], nfcSouthTeamsSorted[0], nfcWestTeamsSorted[0]]
   const afcDivisionSeeds = [afcEastTeamsSorted[0], afcNorthTeamsSorted[0], afcSouthTeamsSorted[0], afcWestTeamsSorted[0]]
 
-
   //TODO Temp WildCard Teams
   const nfcWildCardSeeds = getWildCardTeams('NFC', nfcDivisionSeeds, teamInfo)
   const afcWildCardSeeds = getWildCardTeams('AFC', afcDivisionSeeds, teamInfo)
