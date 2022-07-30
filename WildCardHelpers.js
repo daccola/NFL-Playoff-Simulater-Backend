@@ -8,7 +8,7 @@ export function getWildCardTeams (conference, divisionChamps, teamInfo) {
 }
 
 export function removeInvalidTeams(conference, divisionChamps, teamInfo) {
-  const potentialWildCardTeams = teamInfo.filter(teams => teams.conference === conference);
+	let potentialWildCardTeams = Object.values(teamInfo).filter(teams => teams.conference === conference);
   divisionChamps.forEach((divisionChamp) => { 
     potentialWildCardTeams = potentialWildCardTeams.filter(teams => teams.abbreviation !== divisionChamp.abbreviation );
   })
