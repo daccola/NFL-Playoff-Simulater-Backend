@@ -5,8 +5,10 @@ import { getWildCardTeams } from './WildCardHelpers.js'
 import { getDivisionChampionsStandings } from './DivisionChampionsHelpers.js'
 
 
-export const handler = async () => {
-  const teamInfo = await getUpdatedTeamInfo('2021')
+export const handler = async (event) => {
+  const year = event.year
+
+  const teamInfo = await getUpdatedTeamInfo(year)
 
   const nfcEastTeamsSorted = getDivisionStandings('NFC', 'East', teamInfo)  
   const nfcNorthTeamsSorted = getDivisionStandings('NFC', 'North', teamInfo)
