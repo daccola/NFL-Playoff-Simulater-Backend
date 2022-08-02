@@ -390,13 +390,16 @@ export function getDefaultTeamInfo() {
   return teams
 }
 
-export async function getUpdatedTeamInfo(year) {
+export async function getUpdatedInfo(year) {
 	const teamInfo = getDefaultTeamInfo()
+	const gameInfo = []
 
 	for (let i = 1; i <= 18; i++) {    
 		await Axios.get(`https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?dates=${year}&seasontype=2&week=${i}`)
 			.then((response) => {
 				response.data.events.forEach((game) => {
+					gameInfo[i] = []
+
 					const homeTeam = game.competitions[0].competitors[0].team.abbreviation
 					const roadTeam = game.competitions[0].competitors[1].team.abbreviation
 					const homeConference = teamInfo[homeTeam].conference
@@ -436,7 +439,21 @@ export async function getUpdatedTeamInfo(year) {
 									opponent: homeTeam,
 									oppScore: parseInt(game.competitions[0].competitors[0].score),
 								}
-									
+
+								const newGame = {
+									completed: game.competitions[0].status.type.completed,
+									info: game.competitions[0].status.type.detail,
+									state: game.competitions[0].status.type.state,
+									homeTeam: game.competitions[0].competitors[0].team.abbreviation,
+									homeScore: parseInt(game.competitions[0].competitors[0].score),
+									homeImage: `https://a.espncdn.com/combiner/i?img=/i/teamlogos/nfl/500/${game.competitions[0].competitors[0].team.abbreviation}.png`,
+									roadTeam: game.competitions[0].competitors[1].team.abbreviation,
+									roadScore: parseInt(game.competitions[0].competitors[1].score),
+									roadImage: `https://a.espncdn.com/combiner/i?img=/i/teamlogos/nfl/500/${game.competitions[0].competitors[1].team.abbreviation}.png`,
+								}
+								
+								gameInfo[i].push(newGame)
+
 							// Home Win
 							} else if (game.competitions[0].competitors[0].winner){
 								teamInfo[homeTeam].overallRecord[0] += 1
@@ -464,6 +481,20 @@ export async function getUpdatedTeamInfo(year) {
 									oppScore: parseInt(game.competitions[0].competitors[0].score),
 								}
 							
+								const newGame = {
+									completed: game.competitions[0].status.type.completed,
+									info: game.competitions[0].status.type.detail,
+									state: game.competitions[0].status.type.state,
+									homeTeam: game.competitions[0].competitors[0].team.abbreviation,
+									homeScore: parseInt(game.competitions[0].competitors[0].score),
+									homeImage: `https://a.espncdn.com/combiner/i?img=/i/teamlogos/nfl/500/${game.competitions[0].competitors[0].team.abbreviation}.png`,
+									roadTeam: game.competitions[0].competitors[1].team.abbreviation,
+									roadScore: parseInt(game.competitions[0].competitors[1].score),
+									roadImage: `https://a.espncdn.com/combiner/i?img=/i/teamlogos/nfl/500/${game.competitions[0].competitors[1].team.abbreviation}.png`,
+								}
+								
+								gameInfo[i].push(newGame)
+
 							// Road Win
 							} else if (game.competitions[0].competitors[1].winner){					
 								teamInfo[homeTeam].overallRecord[1] += 1
@@ -490,6 +521,20 @@ export async function getUpdatedTeamInfo(year) {
 									opponent: homeTeam,
 									oppScore: parseInt(game.competitions[0].competitors[0].score),
 								}
+
+								const newGame = {
+									completed: game.competitions[0].status.type.completed,
+									info: game.competitions[0].status.type.detail,
+									state: game.competitions[0].status.type.state,
+									homeTeam: game.competitions[0].competitors[0].team.abbreviation,
+									homeScore: parseInt(game.competitions[0].competitors[0].score),
+									homeImage: `https://a.espncdn.com/combiner/i?img=/i/teamlogos/nfl/500/${game.competitions[0].competitors[0].team.abbreviation}.png`,
+									roadTeam: game.competitions[0].competitors[1].team.abbreviation,
+									roadScore: parseInt(game.competitions[0].competitors[1].score),
+									roadImage: `https://a.espncdn.com/combiner/i?img=/i/teamlogos/nfl/500/${game.competitions[0].competitors[1].team.abbreviation}.png`,
+								}
+								
+								gameInfo[i].push(newGame)
 							}
 							
 						// Same Conference
@@ -518,6 +563,20 @@ export async function getUpdatedTeamInfo(year) {
 									opponent: homeTeam,
 									oppScore: parseInt(game.competitions[0].competitors[0].score),
 								}
+
+								const newGame = {
+									completed: game.competitions[0].status.type.completed,
+									info: game.competitions[0].status.type.detail,
+									state: game.competitions[0].status.type.state,
+									homeTeam: game.competitions[0].competitors[0].team.abbreviation,
+									homeScore: parseInt(game.competitions[0].competitors[0].score),
+									homeImage: `https://a.espncdn.com/combiner/i?img=/i/teamlogos/nfl/500/${game.competitions[0].competitors[0].team.abbreviation}.png`,
+									roadTeam: game.competitions[0].competitors[1].team.abbreviation,
+									roadScore: parseInt(game.competitions[0].competitors[1].score),
+									roadImage: `https://a.espncdn.com/combiner/i?img=/i/teamlogos/nfl/500/${game.competitions[0].competitors[1].team.abbreviation}.png`,
+								}
+								
+								gameInfo[i].push(newGame)
 							
 							// Home Win
 							} else if (game.competitions[0].competitors[0].winner){
@@ -542,6 +601,20 @@ export async function getUpdatedTeamInfo(year) {
 									opponent: homeTeam,
 									oppScore: parseInt(game.competitions[0].competitors[0].score),
 								}
+
+								const newGame = {
+									completed: game.competitions[0].status.type.completed,
+									info: game.competitions[0].status.type.detail,
+									state: game.competitions[0].status.type.state,
+									homeTeam: game.competitions[0].competitors[0].team.abbreviation,
+									homeScore: parseInt(game.competitions[0].competitors[0].score),
+									homeImage: `https://a.espncdn.com/combiner/i?img=/i/teamlogos/nfl/500/${game.competitions[0].competitors[0].team.abbreviation}.png`,
+									roadTeam: game.competitions[0].competitors[1].team.abbreviation,
+									roadScore: parseInt(game.competitions[0].competitors[1].score),
+									roadImage: `https://a.espncdn.com/combiner/i?img=/i/teamlogos/nfl/500/${game.competitions[0].competitors[1].team.abbreviation}.png`,
+								}
+								
+								gameInfo[i].push(newGame)
 								
 							// Road Win
 							} else if (game.competitions[0].competitors[1].winner){					
@@ -566,6 +639,20 @@ export async function getUpdatedTeamInfo(year) {
 									opponent: homeTeam,
 									oppScore: parseInt(game.competitions[0].competitors[0].score),
 								}
+
+								const newGame = {
+									completed: game.competitions[0].status.type.completed,
+									info: game.competitions[0].status.type.detail,
+									state: game.competitions[0].status.type.state,
+									homeTeam: game.competitions[0].competitors[0].team.abbreviation,
+									homeScore: parseInt(game.competitions[0].competitors[0].score),
+									homeImage: `https://a.espncdn.com/combiner/i?img=/i/teamlogos/nfl/500/${game.competitions[0].competitors[0].team.abbreviation}.png`,
+									roadTeam: game.competitions[0].competitors[1].team.abbreviation,
+									roadScore: parseInt(game.competitions[0].competitors[1].score),
+									roadImage: `https://a.espncdn.com/combiner/i?img=/i/teamlogos/nfl/500/${game.competitions[0].competitors[1].team.abbreviation}.png`,
+								}
+								
+								gameInfo[i].push(newGame)
 							}
 						
 						// Different Conference
@@ -591,6 +678,20 @@ export async function getUpdatedTeamInfo(year) {
 									opponent: homeTeam,
 									oppScore: parseInt(game.competitions[0].competitors[0].score),
 								}
+
+								const newGame = {
+									completed: game.competitions[0].status.type.completed,
+									info: game.competitions[0].status.type.detail,
+									state: game.competitions[0].status.type.state,
+									homeTeam: game.competitions[0].competitors[0].team.abbreviation,
+									homeScore: parseInt(game.competitions[0].competitors[0].score),
+									homeImage: `https://a.espncdn.com/combiner/i?img=/i/teamlogos/nfl/500/${game.competitions[0].competitors[0].team.abbreviation}.png`,
+									roadTeam: game.competitions[0].competitors[1].team.abbreviation,
+									roadScore: parseInt(game.competitions[0].competitors[1].score),
+									roadImage: `https://a.espncdn.com/combiner/i?img=/i/teamlogos/nfl/500/${game.competitions[0].competitors[1].team.abbreviation}.png`,
+								}
+								
+								gameInfo[i].push(newGame)
 								
 							// Home Win
 							} else if (game.competitions[0].competitors[0].winner){
@@ -612,6 +713,20 @@ export async function getUpdatedTeamInfo(year) {
 									opponent: homeTeam,
 									oppScore: parseInt(game.competitions[0].competitors[0].score),
 								}
+
+								const newGame = {
+									completed: game.competitions[0].status.type.completed,
+									info: game.competitions[0].status.type.detail,
+									state: game.competitions[0].status.type.state,
+									homeTeam: game.competitions[0].competitors[0].team.abbreviation,
+									homeScore: parseInt(game.competitions[0].competitors[0].score),
+									homeImage: `https://a.espncdn.com/combiner/i?img=/i/teamlogos/nfl/500/${game.competitions[0].competitors[0].team.abbreviation}.png`,
+									roadTeam: game.competitions[0].competitors[1].team.abbreviation,
+									roadScore: parseInt(game.competitions[0].competitors[1].score),
+									roadImage: `https://a.espncdn.com/combiner/i?img=/i/teamlogos/nfl/500/${game.competitions[0].competitors[1].team.abbreviation}.png`,
+								}
+								
+								gameInfo[i].push(newGame)
 							
 							// Road Win
 							} else if (game.competitions[0].competitors[1].winner){					
@@ -633,6 +748,20 @@ export async function getUpdatedTeamInfo(year) {
 									opponent: homeTeam,
 									oppScore: parseInt(game.competitions[0].competitors[0].score),
 								}
+
+								const newGame = {
+									completed: game.competitions[0].status.type.completed,
+									info: game.competitions[0].status.type.detail,
+									state: game.competitions[0].status.type.state,
+									homeTeam: game.competitions[0].competitors[0].team.abbreviation,
+									homeScore: parseInt(game.competitions[0].competitors[0].score),
+									homeImage: `https://a.espncdn.com/combiner/i?img=/i/teamlogos/nfl/500/${game.competitions[0].competitors[0].team.abbreviation}.png`,
+									roadTeam: game.competitions[0].competitors[1].team.abbreviation,
+									roadScore: parseInt(game.competitions[0].competitors[1].score),
+									roadImage: `https://a.espncdn.com/combiner/i?img=/i/teamlogos/nfl/500/${game.competitions[0].competitors[1].team.abbreviation}.png`,
+								}
+								
+								gameInfo[i].push(newGame)
 							}
 						}
 						
@@ -653,6 +782,20 @@ export async function getUpdatedTeamInfo(year) {
 							opponent: homeTeam,
 							oppScore: 0,
 						}
+
+						const newGame = {
+							completed: game.competitions[0].status.type.completed,
+							info: game.competitions[0].status.type.detail,
+							state: game.competitions[0].status.type.state,
+							homeTeam: game.competitions[0].competitors[0].team.abbreviation,
+							homeScore: parseInt(game.competitions[0].competitors[0].score),
+							homeImage: `https://a.espncdn.com/combiner/i?img=/i/teamlogos/nfl/500/${game.competitions[0].competitors[0].team.abbreviation}.png`,
+							roadTeam: game.competitions[0].competitors[1].team.abbreviation,
+							roadScore: parseInt(game.competitions[0].competitors[1].score),
+							roadImage: `https://a.espncdn.com/combiner/i?img=/i/teamlogos/nfl/500/${game.competitions[0].competitors[1].team.abbreviation}.png`,
+						}
+						
+						gameInfo[i].push(newGame)
 					}
       	})
 			})
@@ -662,5 +805,10 @@ export async function getUpdatedTeamInfo(year) {
 			})
   }
 
-	return teamInfo
+	const allInfo = {
+		teamInfo: teamInfo,
+		gameInfo: gameInfo
+	}
+
+	return allInfo
 }

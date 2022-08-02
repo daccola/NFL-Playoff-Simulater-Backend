@@ -1,4 +1,4 @@
-import { getUpdatedTeamInfo } from './TeamInfoHelpers.js'
+import { getUpdatedInfo } from './TeamInfoHelpers.js'
 import { getDivisionStandings } from './DivisionHelpers.js'
 import { getWildCardTeams } from './WildCardHelpers.js'
 
@@ -8,7 +8,9 @@ import { getDivisionChampionsStandings } from './DivisionChampionsHelpers.js'
 export const handler = async (event) => {
   const year = event.year
 
-  const teamInfo = await getUpdatedTeamInfo(year)
+  const info = await getUpdatedInfo(year)
+  const teamInfo = info.teamInfo
+  const gameInfo = info.gameInfo
 
   const nfcEastTeamsSorted = getDivisionStandings('NFC', 'East', teamInfo)  
   const nfcNorthTeamsSorted = getDivisionStandings('NFC', 'North', teamInfo)
@@ -31,7 +33,9 @@ export const handler = async (event) => {
   const allData = {
     version: "1.0",
     time: "",
+
     teamInfoToDate: teamInfo,
+    gameInfoToDate: gameInfo,
 
     nfcEastStandings: nfcEastTeamsSorted,
     nfcNorthStandings: nfcNorthTeamsSorted,
