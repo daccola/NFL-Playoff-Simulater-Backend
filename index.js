@@ -1,4 +1,4 @@
-import { getUpdatedInfo } from './TeamInfoHelpers.js'
+import { getUpdatedInfo } from './GetInfoHelpers.js'
 import { getDivisionStandings } from './DivisionHelpers.js'
 import { getWildCardTeams } from './WildCardHelpers.js'
 
