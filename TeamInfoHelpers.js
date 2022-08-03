@@ -397,9 +397,9 @@ export async function getUpdatedInfo(year) {
 	for (let i = 1; i <= 18; i++) {    
 		await Axios.get(`https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?dates=${year}&seasontype=2&week=${i}`)
 			.then((response) => {
-				response.data.events.forEach((game) => {
-					gameInfo[i] = []
+				gameInfo[i] = []
 
+				response.data.events.forEach((game) => {
 					const homeTeam = game.competitions[0].competitors[0].team.abbreviation
 					const roadTeam = game.competitions[0].competitors[1].team.abbreviation
 					const homeConference = teamInfo[homeTeam].conference
