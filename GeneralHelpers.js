@@ -9,7 +9,16 @@ export function getWonLostTiedPercentage(record){
 export function sortOnlyByRecord(teams){
   const sorted = teams.sort(function (x, y) {
     var diff = getWonLostTiedPercentage(y.overallRecord) - getWonLostTiedPercentage(x.overallRecord)
-    return diff
+    if(diff === 0) {
+			if(getWonLostTiedPercentage(x.overallRecord) === 1 && getWonLostTiedPercentage(y.overallRecord) === 1) {
+				diff = y.overallRecord[0] - x.overallRecord[0]
+			} else if(getWonLostTiedPercentage(x.overallRecord) === 0 && getWonLostTiedPercentage(y.overallRecord) === 0) {
+				diff = x.overallRecord[1] - y.overallRecord[1]
+			} else if(x.overallRecord[0] === 0 && x.overallRecord[1] === 0 && y.overallRecord[0] === 0 && y.overallRecord[1] === 0) {
+				diff = y.overallRecord[2] - x.overallRecord[2]
+			}
+		}
+		return diff
   })
 
   return sorted
